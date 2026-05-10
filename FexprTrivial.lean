@@ -1,0 +1,12 @@
+import FexprTrivial.Term
+import FexprTrivial.Alpha
+import FexprTrivial.Subst
+import FexprTrivial.Coding
+import FexprTrivial.Reduction
+import FexprTrivial.Beta
+import FexprTrivial.LemmaOne
+import FexprTrivial.Determinism
+import FexprTrivial.Discriminator
+import FexprTrivial.WandValue
+import FexprTrivial.Theorem1Concrete
+import FexprTrivial.EqM
