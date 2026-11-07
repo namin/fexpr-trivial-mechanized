@@ -152,8 +152,7 @@ theorem mem_fv_substClosed {M : Term} {x : Name} {V : Term} {y : Name} :
 theorem closed_substClosed {M : Term} {x : Name} {V : Term}
     (hM : ∀ y ∈ M.fv, y = x) (hV : V.closed) :
     (M.substClosed x V).closed := by
-  unfold closed
-  apply List.eq_nil_iff_forall_not_mem.mpr
+  apply closed_not_mem_fv
   intro y hy
   rcases mem_fv_substClosed hy with ⟨hyM, hyx⟩ | hyV
   · exact hyx (hM y hyM)

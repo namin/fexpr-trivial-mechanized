@@ -103,6 +103,10 @@ theorem not_mem_fv_closed {M : Term} (h : M.closed) (y : Name) : y ∉ M.fv := b
   rw [h]
   simp
 
+theorem closed_not_mem_fv {M : Term} (h : ∀ y, y ∉ M.fv) : M.closed := by
+  unfold closed
+  apply List.eq_nil_iff_forall_not_mem.mpr h
+
 /-- If `x` is not free in `M`, renaming is the identity. -/
 theorem rename_fresh (M : Term) (x y : Name) (h : x ∉ M.fv) :
     M.rename x y = M := by
