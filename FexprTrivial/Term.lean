@@ -97,6 +97,12 @@ theorem closed_lam_iff {x : Name} {M : Term} :
   unfold closed
   simp [fv_lam, List.filter_eq_nil_iff]
 
+/-- A closed term has no free variables. -/
+theorem not_mem_fv_closed {M : Term} (h : M.closed) (y : Name) : y ∉ M.fv := by
+  unfold closed at h
+  rw [h]
+  simp
+
 /-- If `x` is not free in `M`, renaming is the identity. -/
 theorem rename_fresh (M : Term) (x y : Name) (h : x ∉ M.fv) :
     M.rename x y = M := by
