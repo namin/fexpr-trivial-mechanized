@@ -244,6 +244,14 @@ theorem step_app_inv {A B P : Term} (h : Step (.app A B) P) :
   | appL _ A' _ hStep     => exact Or.inr (Or.inr (Or.inl ⟨A', hStep, rfl⟩))
   | appR _ _ _ N' hStep   => exact Or.inr (Or.inr (Or.inr ⟨N', .lam _ _, hStep, rfl⟩))
 
+/-- Inversion for a β-redex with a value argument: only `beta` can fire. -/
+theorem step_beta_inv {x : Name} {body V P : Term} (hV : IsValue V)
+    (h : Step (.app (.lam x body) V) P) : body.substClosed x V = P := by
+  cases h with
+  | beta _ _ _ _ _ => rfl
+  | appL _ _ _ hStep => exact (step_lam_absurd hStep).elim
+  | appR _ _ _ _ hStep => exact (step_value_absurd hV hStep).elim
+
 /-- Inversion: a `.fexpr` reduction to a value pins down the value's shape.
     Proven via length-indexed StepStarLen to give Lean a clear measure. -/
 theorem stepStar_fexpr_value_inv_len : ∀ {n : Nat} {M W : Term},
