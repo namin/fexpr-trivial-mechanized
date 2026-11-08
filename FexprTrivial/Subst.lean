@@ -90,9 +90,7 @@ theorem substClosed_not_free (M : Term) (x : Name) (V : Term)
 theorem substClosed_of_closed (M : Term) (h : M.closed) (x : Name) (V : Term) :
     M.substClosed x V = M := by
   apply substClosed_not_free
-  rw [closed] at h
-  rw [h]
-  intro hx; cases hx
+  apply not_mem_fv_closed h
 
 /--
   Free-variable accounting for `substClosed`. Anything free in the
@@ -154,14 +152,11 @@ theorem mem_fv_substClosed {M : Term} {x : Name} {V : Term} {y : Name} :
 theorem closed_substClosed {M : Term} {x : Name} {V : Term}
     (hM : ∀ y ∈ M.fv, y = x) (hV : V.closed) :
     (M.substClosed x V).closed := by
-  unfold closed
-  apply List.eq_nil_iff_forall_not_mem.mpr
+  apply closed_not_mem_fv
   intro y hy
   rcases mem_fv_substClosed hy with ⟨hyM, hyx⟩ | hyV
   · exact hyx (hM y hyM)
-  · unfold closed at hV
-    rw [hV] at hyV
-    cases hyV
+  · apply not_mem_fv_closed hV y hyV
 
 /--
   Reverse direction of `mem_fv_substClosed` when `V` is closed:

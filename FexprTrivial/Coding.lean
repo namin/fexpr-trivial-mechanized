@@ -121,13 +121,7 @@ theorem mem_fv_encode {M : Term} {y : Name} :
 
 /-- Wand Lemma 1.2 (closed half): codes of closed terms are closed. -/
 theorem closed_encode {M : Term} (h : M.closed) : (M.encode).closed := by
-  unfold closed
-  apply List.eq_nil_iff_forall_not_mem.mpr
-  intro y hy
-  have hyM := mem_fv_encode hy
-  unfold closed at h
-  rw [h] at hyM
-  cases hyM
+  apply closed_not_mem_fv fun y hy => not_mem_fv_closed h y (mem_fv_encode hy)
 
 end Term
 end FexprTrivial

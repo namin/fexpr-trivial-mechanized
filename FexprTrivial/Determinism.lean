@@ -45,11 +45,7 @@ theorem step_deterministic : ∀ {M N₁ N₂ : Term},
   intro M N₁ N₂ h₁
   induction h₁ generalizing N₂ with
   | beta x body V hVval hVcl =>
-      intro h₂
-      cases h₂ with
-      | beta _ _ _ _ _ => rfl
-      | appL _ _ _ hStep => exact (step_lam_absurd hStep).elim
-      | appR _ _ _ _ hStep => exact (step_value_absurd hVval hStep).elim
+    exact step_beta_inv hVval
   | reify V M hVval =>
       intro h₂
       cases h₂ with

@@ -75,24 +75,14 @@ theorem step_omega_self : Step omega omega := by
 
 /-- Ω can only step to Ω. -/
 theorem step_omega_unique {X : Term} (h : Step omega X) : X = omega := by
-  cases h with
-  | beta x M V _ _ =>
-    -- Lean unifies omega = .app (.lam x M) V, giving x = "x",
-    -- M = .app (.var "x") (.var "x"), V = delta.
-    -- X = M.substClosed x V; need this = omega.
-    show (Term.app (.var "x") (.var "x")).substClosed "x" delta = omega
-    show Term.app ((Term.var "x").substClosed "x" delta)
-                  ((Term.var "x").substClosed "x" delta) = omega
-    have h1 : (Term.var "x").substClosed "x" delta = delta := by
-      show (if "x" = "x" then delta else Term.var "x") = delta
-      rw [if_pos rfl]
-    rw [h1]; rfl
-  | appL _ _ _ hStep =>
-    -- Step on operator delta. delta is a value, no Step.
-    exact (step_value_absurd delta_value hStep).elim
-  | appR _ _ _ _ hStep =>
-    -- Step on operand delta. delta is a value, no Step.
-    exact (step_value_absurd delta_value hStep).elim
+  rw [← step_beta_inv delta_value h]
+  show (Term.app (.var "x") (.var "x")).substClosed "x" delta = omega
+  show Term.app ((Term.var "x").substClosed "x" delta)
+                ((Term.var "x").substClosed "x" delta) = omega
+  have h1 : (Term.var "x").substClosed "x" delta = delta := by
+    show (if "x" = "x" then delta else Term.var "x") = delta
+    rw [if_pos rfl]
+  rw [h1]; rfl
 
 /-- Anything reachable from Ω via StepStar is Ω. Stated as an
     auxiliary that lets us induct over an arbitrary starting term. -/
